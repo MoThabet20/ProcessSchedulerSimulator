@@ -10,7 +10,20 @@ namespace SchedualProcessOS.BL
     {
         public List<Processes> MainProcesses { get ; set; }
         public List<Processes> WaitingProcesses { get; set; }
+        public List<Processes> EndedProcesses { get; set; }
 
+        public ShortestProcess()
+        {
+            WaitingProcesses = new List<Processes>();
+            MainProcesses = new List<Processes>();
+            EndedProcesses= new List<Processes>();
+        }
+        public ShortestProcess(List<Processes> mainProcesses)
+        {
+            MainProcesses = mainProcesses;
+            WaitingProcesses = new List<Processes>();
+            EndedProcesses = new List<Processes>();
+        }
         public Processes IncomingProcesses(Processes currentProcess, int timeLineIndex)
         {
             //check for incoming process using the timelineIndex
@@ -20,6 +33,9 @@ namespace SchedualProcessOS.BL
                 return currentProcess;
             else
             {
+                if (currentProcess == null || currentProcess.RemainingBurstTime <= 0)
+                    return myProcess;
+
                 //case for each process myProcess or currentProcess
                 if(myProcess.BurstTime<currentProcess.BurstTime)
                 {
@@ -47,8 +63,15 @@ namespace SchedualProcessOS.BL
             //get process
             Processes myProcess = WaitingProcesses.Where(a => a.RemainingBurstTime == minBurstTime).FirstOrDefault();
 
+            //adding new check for null handling
+            if (currentProcess == null || currentProcess.RemainingBurstTime==0)
+            {
+                WaitingProcesses.Remove(myProcess);
+                return myProcess;
+            }
+
             //check for each process
-            if(currentProcess.RemainingBurstTime < myProcess.RemainingBurstTime)
+            if (currentProcess.RemainingBurstTime < myProcess.RemainingBurstTime)
                 return currentProcess;
             else
             {

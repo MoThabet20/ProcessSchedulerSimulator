@@ -13,6 +13,9 @@ namespace SchedualProcessOS.BL
         //queue 
         public List<Processes> WaitingProcesses { get; set; }
 
+        //endedProcess
+        public List<Processes> EndedProcesses { get; set; }
+
         //Methods
         //Method1---> treat with incoming process and compare it with the process
         // in the queue and it returns Process.
