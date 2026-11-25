@@ -37,7 +37,7 @@ namespace SchedualProcessOS.BL
                     return myProcess;
 
                 //case for each process myProcess or currentProcess
-                if(myProcess.BurstTime<currentProcess.BurstTime)
+                if(myProcess.RemainingBurstTime < currentProcess.RemainingBurstTime)
                 {
                     WaitingProcesses.Add(currentProcess);
                     return myProcess;
@@ -53,7 +53,13 @@ namespace SchedualProcessOS.BL
 
         public Processes IncomingProcesses()
         {
-            return MainProcesses.FirstOrDefault();
+            //this is risk because i depend on the data in general in json accending input
+            //but i want to be completely depend on the arrivalTime without control json objects
+            //return MainProcesses.FirstOrDefault();
+
+            return MainProcesses.Where(a => a.ArivalTime == 0)
+                                 .OrderBy(a => a.ArivalTime)
+                                 .FirstOrDefault();
         }
 
         public Processes IncomingQueue(Processes currentProcess)
